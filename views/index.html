@@ -1,0 +1,12 @@
+<h1>{{ .Title }}</h1>
+{{ range .Words }}
+<div class="item">
+  <h3 class="name">{{.}}</h3>
+</div>
+{{ end }}
+{{ range .Users }}
+<div class="user">
+  <h3 class="email">{{.Email}}</h3>
+  <h5 class="password">{{.Password}}</h5>
+</div>
+{{ end }}
