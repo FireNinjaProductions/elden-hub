@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"text/template"
 
 	"github.com/go-webpack/webpack"
 	"github.com/gofiber/fiber/v2"
@@ -50,22 +49,20 @@ func Connect() error {
 	return nil
 }
 
-func init() {
-	// this is because public folder is shared between examples
-	webpack.FsPath = "./public/webpack" // /home/wiz/go/src/github.com/JimmyMcBride/elden-hub/
-}
+// func init() {
+// 	// this is because public folder is shared between examples
+// 	webpack.FsPath = "./public/webpack" // /home/wiz/go/src/github.com/JimmyMcBride/elden-hub/
+// }
 
-func viewHelpers() template.FuncMap {
-	return template.FuncMap{
-		"asset": webpack.AssetHelper,
-	}
-}
+// func viewHelpers() template.FuncMap {
+// 	return template.FuncMap{
+// 		"asset": webpack.AssetHelper,
+// 	}
+// }
 
 func main() {
 	engine := html.New("./views", ".html")
-	for name, method := range viewHelpers() {
-		engine.AddFunc(name, method)
-	}
+	engine.AddFunc("asset", webpack.AssetHelper)
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
@@ -76,6 +73,9 @@ func main() {
 	isDev := flag.Bool("dev", false, "development mode")
 	flag.Parse()
 
+	webpack.DevHost = "localhost:4000"
+	webpack.FsPath = "./public/webpack"
+	webpack.Plugin = "manifest"
 	webpack.IgnoreMissing = true
 
 	webpack.Init(*isDev)

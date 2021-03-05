@@ -1,0 +1,22 @@
+{
+  "name": "elden-hub",
+  "version": "1.0.0",
+  "description": "A forum / set of theory crafting and build planning tools. A refuge for hollow souls.",
+  "main": "client/index.js",
+  "repository": "git@github.com:JimmyMcBride/elden-hub.git",
+  "author": "JimmyMcBride <mcbride967@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "webpack": "^5.24.3",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
+}
