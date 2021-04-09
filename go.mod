@@ -7,4 +7,6 @@ require (
 	github.com/gofiber/fiber/v2 v2.5.0
 	github.com/gofiber/template v1.6.6
 	github.com/lib/pq v1.0.0
+	go.mongodb.org/mongo-driver v1.5.1
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )

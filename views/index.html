@@ -1,12 +1,30 @@
 <h1>{{ .Title }}</h1>
 {{ range .Words }}
 <div class="item">
-  <h3 class="name">{{.}}</h3>
+  <p class="name">{{.}}</p>
 </div>
 {{ end }}
-{{ range .Users }}
 <div class="user">
-  <h3 class="email">{{.Email}}</h3>
-  <h5 class="password">{{.Password}}</h5>
+  <p class="username">{{.User.Username}}</p>
 </div>
-{{ end }}
+<div id="hey">
+  <a v-for="link in pinks" :href="'/' + link.toLowerCase()" :key="link">[[ link ]]</a>
+</div>
+<!-- <a v-for="link in links" :href="'/' + link.toLowerCase()" :key="link">[[ link ]]</a> -->
+<script>
+  new Vue({
+    delimiters: ["[[", "]]"],
+    el: '#hey',
+    data() {
+      return {
+        pinks: ["lout", "crout", "asdf", "bfgdbfg"],
+        addSidebarClass: false,
+      }
+    },
+    methods: {
+      toggleNav() {
+        this.addSidebarClass = !this.addSidebarClass
+      }
+    }
+  })
+</script>

@@ -1,0 +1,35 @@
+.tac {
+  text-align: center;
+}
+
+.tal {
+  text-align: left;
+}
+
+.tae {
+  text-align: end;
+}
+
+.tar {
+  text-align: right;
+}
+
+.tas {
+  text-align: start;
+}
+
+.taj {
+  text-align: justify;
+}
+
+.tah {
+  text-align: inherit;
+}
+
+.tai {
+  text-align: initial;
+}
+
+.tau {
+  text-align: unset;
+}

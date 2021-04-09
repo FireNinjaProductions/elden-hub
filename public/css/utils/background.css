@@ -1,0 +1,8 @@
+.bg-dark {
+  /* background: var(--dark-bg); */
+  background: var(--grayNine);
+}
+
+.shade {
+  box-shadow: var(--shadow);
+}

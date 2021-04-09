@@ -1,33 +1,20 @@
 package main
 
 import (
-	"database/sql"
-	"flag"
 	"fmt"
 	"log"
 
-	"github.com/go-webpack/webpack"
+	"github.com/JimmyMcBride/elden-hub/db"
+	"github.com/JimmyMcBride/elden-hub/repository"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html"
 	_ "github.com/lib/pq"
 )
 
-// Database instance
-var db *sql.DB
-
-// Database settings
-const (
-	host     = "localhost"
-	port     = 5432 // Default port
-	user     = "postgres"
-	password = "password"
-	dbname   = "fiber_demo"
-)
-
 // User is a person with an account on our site.
 type User struct {
 	ID       int    `json:"id"`
-	Email    string `json:"email"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -36,33 +23,10 @@ type Users struct {
 	Users []User `json:"user"`
 }
 
-// Connect function
-func Connect() error {
-	var err error
-	db, err = sql.Open("postgres", fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname))
-	if err != nil {
-		return err
-	}
-	if err = db.Ping(); err != nil {
-		return err
-	}
-	return nil
-}
-
-// func init() {
-// 	// this is because public folder is shared between examples
-// 	webpack.FsPath = "./public/webpack" // /home/wiz/go/src/github.com/JimmyMcBride/elden-hub/
-// }
-
-// func viewHelpers() template.FuncMap {
-// 	return template.FuncMap{
-// 		"asset": webpack.AssetHelper,
-// 	}
-// }
-
 func main() {
 	engine := html.New("./views", ".html")
-	engine.AddFunc("asset", webpack.AssetHelper)
+
+	db := db.NewConnection()
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
@@ -70,36 +34,12 @@ func main() {
 
 	app.Static("/", "./public")
 
-	isDev := flag.Bool("dev", false, "development mode")
-	flag.Parse()
-
-	webpack.DevHost = "localhost:4000"
-	webpack.FsPath = "./public/webpack"
-	webpack.Plugin = "manifest"
-	webpack.IgnoreMissing = true
-
-	webpack.Init(*isDev)
-
-	if err := Connect(); err != nil {
-		log.Fatal(err)
-	}
-
 	app.Get("/", func(c *fiber.Ctx) error {
-		rows, err := db.Query("SELECT * FROM users order by id")
+		UsersRepository := repository.NewUsersRepository(db)
+		user, err := UsersRepository.GetByEmail("mcbride967@gmail.com")
 		if err != nil {
-			return c.Status(500).SendString(err.Error())
-		}
-		defer rows.Close()
-		result := Users{}
-
-		for rows.Next() {
-			user := User{}
-			if err := rows.Scan(&user.ID, &user.Email, &user.Password); err != nil {
-				return err // Exit if we get an error
-			}
-
-			// Append User to Users
-			result.Users = append(result.Users, user)
+			fmt.Println("There was a problem getting your users table.")
+			panic(err)
 		}
 
 		var a [2]string
@@ -107,9 +47,10 @@ func main() {
 		a[1] = "World"
 
 		return c.Render("index", fiber.Map{
-			"Title": "Hello, world!",
-			"Words": a,
-			"Users": result.Users,
+			"Title":       "Hello, world!",
+			"Words":       a,
+			"User":        user,
+			"Description": "A refuge for hollowed souls.",
 		}, "layouts/main")
 	})
 

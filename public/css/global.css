@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  color: var(--text);
+}
+
+html {
+  font-size: 62.5%;
+  font-family: "Noto Sans", sans-serif;
+}
+
+body {
+  background: var(--darkGray);
+  /* background: var(--main-bg); */
+  /* max-width: 100vw; */
+  width: 100vw;
+  font-size: 1.6rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Cinzel Decorative", cursive;
+  /* font-weight: 400; */
+  margin: 0;
+}
+
+.divider {
+  width: 100%;
+  height: 0.2rem;
+  /* background-color: var(--deepOrangeFour); */
+  background-color: var(--graySeven);
+}
+
+.primary-btn {
+  border: none;
+  margin: 0 1rem;
+  background: var(--grayNine);
+  font-weight: bold;
+  border: 0.2rem solid var(--grayEight);
+  padding: 1rem 2rem;
+  margin: 1rem;
+  font-family: "Cinzel Decorative", cursive;
+}
+
+.primary-btn:hover {
+  background: var(--grayEight);
+  border: 0.2rem solid var(--graySeven);
+}
+
+/* .secondary-btn {
+  border: none;
+  margin: 0 1rem;
+  background: var(--grayNine);
+  font-weight: bold;
+  border: 0.2rem solid var(--grayEight);
+  padding: 1rem 2rem;
+  margin: 1rem;
+  font-family: "Cinzel Decorative", cursive;
+}
+
+.secondary-btn:hover {
+  background: var(--grayEight);
+  border: 0.2rem solid var(--graySeven);
+} */
