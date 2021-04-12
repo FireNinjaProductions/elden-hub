@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/JimmyMcBride/elden-hub/db"
 	"github.com/JimmyMcBride/elden-hub/repository"
+	"github.com/JimmyMcBride/elden-hub/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cache"
 	"github.com/gofiber/template/html"
 	_ "github.com/lib/pq"
 )
@@ -23,14 +26,37 @@ type Users struct {
 	Users []User `json:"user"`
 }
 
+func MyFunk(str string) string {
+	return str
+}
+
 func main() {
-	engine := html.New("./views", ".html")
+	bcrypt := utils.NewBCrypt(16)
+
+	// Hash password using the salt
+	hashedPassword := bcrypt.HashPassword("hello")
+
+	fmt.Println("Password Hash:", hashedPassword)
+
+	// Check if passed password matches the original password by hashing it
+	// with the original password's salt and check if the hashes match
+	fmt.Println("Password Match:", bcrypt.DoPasswordsMatch(hashedPassword, "hello"))
+
+	engine := html.New("./views", ".gohtml")
 
 	db := db.NewConnection()
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
+
+	app.Use(cache.New(cache.Config{
+		Next: func(c *fiber.Ctx) bool {
+			return c.Query("refresh") == "true"
+		},
+		Expiration:   300 * time.Hour,
+		CacheControl: true,
+	}))
 
 	app.Static("/", "./public")
 
@@ -42,15 +68,15 @@ func main() {
 			panic(err)
 		}
 
-		var a [2]string
-		a[0] = "Hello"
-		a[1] = "World"
+		links := []string{"About", "Services", "Clients", "Contact"}
 
 		return c.Render("index", fiber.Map{
-			"Title":       "Hello, world!",
-			"Words":       a,
-			"User":        user,
-			"Description": "A refuge for hollowed souls.",
+			"Title":        "Hello, world!",
+			"User":         user,
+			"Links":        links,
+			"SidebarOpen":  true,
+			"MyFunk":       MyFunk("Hey!"),
+			"Dependencies": []string{"https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"},
 		}, "layouts/main")
 	})
 

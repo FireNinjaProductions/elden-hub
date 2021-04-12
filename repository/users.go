@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/JimmyMcBride/elden-hub/db"
 	"github.com/JimmyMcBride/elden-hub/models"
+	"github.com/JimmyMcBride/elden-hub/utils"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -28,6 +29,9 @@ func NewUsersRepository(conn db.Connection) UsersRepository {
 }
 
 func (r *usersRepository) Save(user *models.User) error {
+	bcrypt := utils.NewBCrypt(16)
+	hashedPassword := bcrypt.HashPassword(user.Password)
+	user.Password = hashedPassword
 	return r.c.Insert(user)
 }
 

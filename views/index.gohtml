@@ -1,0 +1,26 @@
+<h1>{{ .Title }}</h1>
+<div class="user">
+  <p class="username">{{.User.Username}}</p>
+  <p>
+    {{.MyFunk}}
+  </p>
+</div>
+<div id="hey">
+  <a v-for="link in pinks" :href="'/' + link.toLowerCase()" :key="link">[[ link ]]</a>
+</div>
+<script>
+  new Vue({
+    delimiters: ["[[", "]]"],
+    el: '#hey',
+    data() {
+      return {
+        pinks: ["lout", "crout", "asdf", "bfgdbfg"],
+      }
+    },
+    methods: {
+      toggleNav() {
+        return 
+      }
+    }
+  })
+</script>

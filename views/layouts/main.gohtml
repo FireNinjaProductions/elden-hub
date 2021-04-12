@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{.Description}}">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="icon" type="image/ico" href="favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Sans&display=swap"
+    rel="stylesheet">
+
+  <link href="css/main.css" type="text/css" rel="stylesheet">
+
+  <!-- development version, includes helpful console warnings -->
+  {{/* <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> */}}
+  <!-- production version, optimized for size and speed -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+  {{range .Dependencies}}
+  {{template "layouts/partials/script" .}}
+  {{end}}
+
+  <title>{{ .Title }} 🚀</title>
+</head>
+
+<body>
+  <div id="layout" class="main-layout drape">
+    <div id="sb-overlay" onclick="toggleNav()"></div>
+    <div id="sidebar" class="sidebar">
+      <div class="identity-box pa-md">
+        <button class="primary-btn" style="font-size: 1.2rem;">Login / Sign Up</button>
+      </div>
+      {{ range .Links }}
+        <a :href="'/' + {{.}}.toLowerCase()">{{.}}</a>
+      {{ end }}
+    </div>
+    <nav class="col jcb stretch pa-md" style="border-radius: 0;">
+      <div class="hamburger center" onclick="toggleNav()">
+        <div class="bun">
+          <div class="patty"></div>
+          <div class="patty"></div>
+          <div class="patty"></div>
+        </div>
+      </div>
+      <div>
+        <h1 class="mb-md mt-lg" style="font-size: 5rem;">Elden Hub</h1>
+        <h5>A refuge for lost and hollowed souls...</h5>
+      </div>
+    </nav>
+    <div class="col jcb bg-dark pa-sm ma-lg shade" style="width: 80rem; max-width: 96%; height: 20rem">
+      <div class="divider"></div>
+      <div class="row jcc aie" style="height: 16rem;">
+        <button style="width: 12rem" class="primary-btn">OK</button>
+        <button style="width: 12rem" class="primary-btn">CANCEL</button>
+      </div>
+      <div class="divider"></div>
+    </div>
+    {{ embed }}
+  </div>
+
+  <script>
+    const layout = document.querySelector("#layout")
+    const sidebar = document.querySelector("#sidebar")
+    const overlay = document.querySelector("#sb-overlay")
+
+    function toggleNav() {
+      layout.classList.toggle("layout-toggle");
+      sidebar.classList.toggle("sidebar-toggle");
+      overlay.classList.toggle("sidebar-overlay");
+
+      layout.classList.add("animate");
+      sidebar.classList.add("animate");
+    }
+  </script>
+  <style>
+    .identity-box {
+      background-image: url("assets/brokenking.jpeg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 30rem;
+      height: 19.2rem;
+    }
+
+    nav {
+      background-image: url("assets/valk-banner.webp");
+      height: 19.2rem;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .hamburger {
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: 50%;
+    }
+
+    .hamburger:hover {
+      background: var(--whiteAlphaThree);
+    }
+
+    .hamburger:active {
+      background: var(--whiteAlphaFive);
+    }
+
+    .bun {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+
+    .bun .patty {
+      width: 2rem;
+      height: 0.2rem;
+      background: var(--text);
+      margin: 0.4rem 0.2rem;
+    }
+
+    /* The sidebar menu */
+    .sidebar {
+      height: 100%;
+      width: 30rem;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      {{if .SidebarOpen}}
+      left: 0;
+      {{else}}
+      left: -30rem;
+      {{end}}
+      background-color: var(--grayNine);
+      overflow-x: hidden;
+    }
+
+    #layout {
+      {{if .SidebarOpen}}
+      margin-left: 30rem;
+      {{else}}
+      margin-left: 0;
+      {{end}}
+      {{/* transition: 0.2s; */}}
+    }
+
+    .layout-toggle {
+      {{if .SidebarOpen}}
+      margin-left: 0 !important;
+      {{else}}
+      margin-left: 30rem !important;
+      {{end}}
+      {{/* transition: 0.2s; */}}
+    }
+
+    .animate {
+      transition: 0.2s;
+    }
+
+    .sidebar-toggle {
+      {{if .SidebarOpen}}
+      left: -30rem;
+      {{else}}
+      left: 0;
+      {{end}}
+      {{/* transition: 0.2s; */}}
+    }
+
+    @media only screen and (max-width: 1220px) {
+      .sidebar {
+        left: -30rem;
+      }
+
+      #layout {
+        margin-left: 0;
+      }
+
+      .layout-toggle {
+        margin-left: 0 !important;
+      }
+
+      .sidebar-overlay {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        background: var(--blackAlphaSeven);
+      }
+
+      .sidebar-toggle {
+        left: 0;
+      }
+    }
+
+    /* The sidebar links */
+    .sidebar a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+      {{/* transition: 0.3s; */}}
+    }
+
+    /* When you mouse over the navigation links, change their color */
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+
+    /* Position and style the close button (top right corner) */
+    .sidebar .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+    @media screen and (max-height: 450px) {
+      .sidebar {
+        padding-top: 15px;
+      }
+      .sidebar a {
+        font-size: 18px;
+      }
+    }
+
+  </style>
+</body>
+
+</html>
